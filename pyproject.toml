@@ -11,7 +11,7 @@ requires-python = ">=3.11"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["agents*", "api*", "config*", "eval*", "graph*", "guardrails*", "observability*", "pipelines*", "prompts*", "rag*", "schemas*", "services*", "tools*"]
+include = ["agents*", "api*", "chunking*", "config*", "connectors*", "document_builders*", "eval*", "extractors*", "graph*", "guardrails*", "observability*", "pipelines*", "prompts*", "rag*", "schemas*", "services*", "state*", "storage*", "tools*"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"

@@ -30,5 +30,7 @@ class ParsedUnit(BaseModel):
         ...,
         description="Outcome: success, partial, or failed.",
     )
-    error: str | None = Field(None, description="Error message or code when parse_status is not success.")
+    error: str | None = Field(None, description="Error message or code when parse_status is not success (legacy).")
+    error_type: str | None = Field(None, description="Error type for retry policies, e.g. ExtractionError, PageReadError.")
+    error_message: str | None = Field(None, description="Full error message when parse_status is not success.")
     created_at: datetime = Field(..., description="When this unit was produced by the extractor.")

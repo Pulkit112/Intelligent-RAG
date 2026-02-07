@@ -6,10 +6,10 @@ Production-grade document intelligence with document ingestion, vector store + e
 
 ## Setup (pyenv)
 
-1. **Install Python** (if needed): `pyenv install 3.11`
-2. **Set local version:** In project root: `pyenv local 3.11`
+1. **Install Python** (if needed): `pyenv install 3.12` (or 3.11; see `.python-version`)
+2. **Set local version:** In project root: `pyenv local 3.12`
 3. **Create virtualenv:** `python -m venv .venv`
-4. **Activate:** `source .venv/bin/activate` (Windows: `.venv\Scripts\activate`)
+4. **Activate:** `source .venv/bin/activate` (Windows: `.venv\Scripts\activate`) — **required before running any Python commands**
 5. **Install:** `pip install -e .` then `pip install -r requirements.txt`
 6. **Env:** Copy `.env.example` to `.env` and set `OPENAI_API_KEY` and other variables.
 
@@ -22,6 +22,17 @@ uvicorn api.main:app --reload
 ```
 
 Open `http://127.0.0.1:8000/` for health check (`{"status": "ok"}`).
+
+## Run ingestion (preview chunks for a PDF)
+
+From project root **with venv activated**:
+
+```bash
+source .venv/bin/activate
+python -m pipelines.ingestion_orchestrator --path /path/to/file.pdf --preview --no-skip
+```
+
+Use `--preview-out preview.json` to write chunks/units to a file. Without `--preview`, chunks are persisted to `data/chunks/`.
 
 ## Run tests
 
