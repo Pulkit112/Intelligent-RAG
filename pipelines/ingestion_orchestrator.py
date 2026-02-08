@@ -15,6 +15,7 @@ from connectors.file_connector import FileConnector
 from document_builders.file_document_builder import FileDocumentBuilder
 from extractors.registry import get_extractor
 from observability.logger import get_logger
+from rag.text_normalizer import normalize_text
 from schemas.chunk_document import ChunkDocument
 from schemas.parsed_unit import ParsedUnit
 from schemas.source_document import SourceDocument
@@ -127,9 +128,11 @@ def run_ingestion(
                 if use_unit_checkpoint and not preview:
                     update_unit_progress(doc.doc_id, unit.unit_index, doc.checksum)
                 continue
-            text = unit.text or ""
+            text = normalize_text(unit.text or "")
+            # Later: header/footer stripper (layout cleaner) before chunking to reduce RAG noise
             if text.strip():
-                for chunk in chunker.chunk(unit):
+                unit_for_chunk = unit.model_copy(update={"text": text})
+                for chunk in chunker.chunk(unit_for_chunk):
                     if after_chunk is not None:
                         after_chunk(chunk)
                     doc_chunks.append(chunk)

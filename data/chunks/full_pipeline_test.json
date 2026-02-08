@@ -1,0 +1,32 @@
+[
+  {
+    "chunk_id": "full_pipeline_test_c0",
+    "doc_id": "full_pipeline_test",
+    "chunk_index": 0,
+    "text": "This is the first chunk for the full pipeline test.",
+    "start_char": null,
+    "end_char": null,
+    "chunk_strategy": "recursive",
+    "token_count": 10,
+    "page_number": 1,
+    "section_title": "",
+    "source_uri": "file:///test/doc.pdf",
+    "metadata": {},
+    "created_at": "2026-02-07T21:02:11.536464+00:00"
+  },
+  {
+    "chunk_id": "full_pipeline_test_c1",
+    "doc_id": "full_pipeline_test",
+    "chunk_index": 1,
+    "text": "This is the second chunk to verify embedding and vector store.",
+    "start_char": null,
+    "end_char": null,
+    "chunk_strategy": "recursive",
+    "token_count": 12,
+    "page_number": 1,
+    "section_title": "",
+    "source_uri": "file:///test/doc.pdf",
+    "metadata": {},
+    "created_at": "2026-02-07T21:02:11.536464+00:00"
+  }
+]

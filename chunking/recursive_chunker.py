@@ -8,6 +8,7 @@ from datetime import datetime, timezone
 from typing import List
 
 from chunking.base import BaseChunker
+from rag.token_counter import estimate_token_count
 from schemas.chunk_document import ChunkDocument
 from schemas.parsed_unit import ParsedUnit
 
@@ -61,6 +62,9 @@ class RecursiveChunker(BaseChunker):
     Recursive text splitter: split by separators (paragraph, newline, space), then merge to chunk_size with overlap.
 
     Sets chunk_strategy="recursive". Configurable chunk_size and overlap.
+
+    Rule: chunk() runs per ParsedUnit only. It does NOT merge across units (e.g. across pages).
+    Each unit is chunked independently so page_number and unit boundaries are preserved.
     """
 
     DEFAULT_SEPARATORS = ["\n\n", "\n", ". ", " ", ""]
@@ -77,7 +81,11 @@ class RecursiveChunker(BaseChunker):
         self.separators = separators if separators is not None else self.DEFAULT_SEPARATORS.copy()
 
     def chunk(self, unit: ParsedUnit) -> list[ChunkDocument]:
-        """Split unit text by separators and merge to chunk_size; return ChunkDocument list."""
+        """
+        Split this single ParsedUnit's text by separators and merge to chunk_size.
+
+        Does not merge across ParsedUnits; each unit is chunked independently (page boundaries preserved).
+        """
         text = (unit.text or "").strip()
         if not text:
             return []
@@ -101,6 +109,7 @@ class RecursiveChunker(BaseChunker):
                 "page_number": page_number,
                 "section_title": section_title,
             }
+            token_count = estimate_token_count(block)
             result.append(
                 ChunkDocument(
                     chunk_id=chunk_id,
@@ -110,7 +119,7 @@ class RecursiveChunker(BaseChunker):
                     start_char=start,
                     end_char=end,
                     chunk_strategy="recursive",
-                    token_count=None,
+                    token_count=token_count,
                     page_number=page_number,
                     section_title=section_title,
                     source_uri=source_uri,
